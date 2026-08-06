@@ -1,0 +1,30 @@
+.today{
+  
+  text-align: left;
+  font-size: 15px;
+  
+}
+
+.test-date{
+  text-align: right;
+  margin-top: 0;
+}
+
+.undo{
+  text-align: center;
+  color: grey;
+  display: block;
+  text-decoration: none;
+  margin-top: 8px;
+
+  &:hover{
+    color: #027067;
+    cursor: pointer;
+  }
+}
+
+.card-test{
+  align-self: center;
+  margin-top: 20px;
+  border-radius: 12px !important;
+}
