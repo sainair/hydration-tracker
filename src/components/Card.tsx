@@ -2,7 +2,7 @@ import { type ReactNode } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 interface CardProps{
-    heading: string;
+    heading?: string;
     body?: string;
     topContent?: ReactNode;
     children?: ReactNode;

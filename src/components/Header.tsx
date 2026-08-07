@@ -3,7 +3,7 @@ const Header = () => {
   return (
     <div>
         <h1 className="app-header" style={{fontSize: '50px'}}>
-            Welcome to Glass!
+            Welcome!
         </h1>
     </div>
   )
