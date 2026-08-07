@@ -22,11 +22,11 @@ function App() {
           <CurrentDate className='test-date'/>
         </div>
       } heading='X out of Y cups' className="card-test">
-        
+
         <div className="d-flex justify-content-center">
           <button type='button' className="btn btn-success add-btn">+Add a cup</button>
         </div>
-        <a className="undo">Undo</a>
+        <button className="undo">Undo</button>
 
       </Card>
     </>
