@@ -29,7 +29,7 @@ function App() {
 
         <div className='log-container'>
           {Array.from({length: target}, (_, i) => (
-            <div key={i+1} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
+            <div key={i} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
           ))}
         </div>
         <div className="d-flex justify-content-center">

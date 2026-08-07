@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Glass">
+  <title>Glass</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0F3F5C"/>
+      <stop offset="1" stop-color="#082B41"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5EDCF5"/>
+      <stop offset="1" stop-color="#0E8FC4"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <path d="M41.4 61 L86.6 61 L79 99 Q78 105 72 105 L56 105 Q50 105 49 99 Z" fill="url(#water)"/>
+  <path d="M34 21 L94 21 L79 99 Q78 105 72 105 L56 105 Q50 105 49 99 Z" fill="none" stroke="#EAF6FB" stroke-width="6.5" stroke-linejoin="round"/>
+  <path d="M43 33 L50 63" stroke="#EAF6FB" stroke-width="3.5" stroke-linecap="round" opacity="0.45"/>
+</svg>

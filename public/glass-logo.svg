@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Glass">
+  <title>Glass</title>
+  <defs>
+    <linearGradient id="w" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5EDCF5"/>
+      <stop offset="1" stop-color="#0E8FC4"/>
+    </linearGradient>
+  </defs>
+  <path d="M20.7 32 L43.3 32 L39.5 51 Q39 54 36 54 L28 54 Q25 54 24.5 51 Z" fill="url(#w)"/>
+  <path d="M17 12 L47 12 L39.5 51 Q39 54 36 54 L28 54 Q25 54 24.5 51 Z" fill="none" stroke="#1B7FA8" stroke-width="3.5" stroke-linejoin="round"/>
+</svg>
