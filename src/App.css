@@ -11,15 +11,11 @@
 }
 
 .undo{
-  text-align: center;
-  color: grey;
-  display: block;
-  text-decoration: none;
-  margin-top: 8px;
+  border: none;
+  background: none;
 
   &:hover{
     color: #027067;
-    cursor: pointer;
   }
 }
 
