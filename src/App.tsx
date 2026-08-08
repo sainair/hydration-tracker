@@ -6,6 +6,8 @@ import './App.css'
 import Header from './components/Header';
 import Card from './components/Card';
 import CurrentDate from './components/CurrentDate';
+import Login from './components/Login';
+
 import { useEffect, useState } from 'react';
 
 
@@ -15,8 +17,10 @@ function App() {
   //API
   const API = "http://localhost:8000"
 
+  //STATES
+  //loading state so that unloaded values are not flashed to the user
+  const [loading, setLoading] = useState(true);
   //Attempt to add functionality to the buttons
-
   const [entries, setEntries] = useState([])
   const count = entries.length;
   const target = 7;
@@ -25,6 +29,7 @@ function App() {
     const res = await fetch(`${API}/entries/today`, {method: "GET"});
     const data = await res.json();
     setEntries(data);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -57,13 +62,13 @@ function App() {
           <p className='today'><strong>Today</strong></p>
           <CurrentDate className='test-date'/>
         </div>
-      } heading={`${count} out of ${target} cups`} className="card-test">
+      } heading={loading ? "Loading..." :`${count} out of ${target} cups`} className="card-test">
 
-        <div className='log-container'>
+        {loading ? <p>Loading...</p> : <div className='log-container'>
           {Array.from({length: target}, (_, i) => (
             <div key={i} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
           ))}
-        </div>
+        </div>}
         <div className="d-flex justify-content-center">
           
           <button type='button' className="btn btn-success add-btn" onClick={addCup}>+Add a cup</button>
@@ -71,6 +76,7 @@ function App() {
         <button className="undo" onClick={undoCup}>Undo</button>
 
       </Card>
+      <Login />
     </>
     
   )

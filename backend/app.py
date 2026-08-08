@@ -4,6 +4,7 @@ from sqlmodel import SQLModel, Field, create_engine, Session, select
 from sqlalchemy import Column, DateTime, func, text 
 from datetime import datetime
 from contextlib import asynccontextmanager
+import bcrypt
 import os
 
 DATABASE_URL = os.environ["DATABASE_URL"]
@@ -27,8 +28,10 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+#TABLES
 class Habits(SQLModel, table=True):
     id: int | None = Field(default = None, primary_key = True)
+    user_id: int = Field(foreign_key="users.id", index=True)
     name: str
     target: int
     unit: str
@@ -39,6 +42,24 @@ class Entry(SQLModel, table=True):
     logged_at: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)) #handle timezone conversions
     amount: int = 1
 
+class Users(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    username: str = Field(unique=True, index=True)
+    password_hash: str
+    created_at: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False))
+
+class UserCreate(SQLModel):
+    username: str
+    password: str
+
+class UserRead(SQLModel):
+    id: int
+    username: str
+    created_at: datetime
+
+def hash_password(password: str):
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
 def get_session():                      #creates the session object to be used by endpoints
     with Session(engine) as session:
         yield session
@@ -46,6 +67,19 @@ def get_session():                      #creates the session object to be used b
 @app.get("/")
 def read_root():
     return {"message": "GlassAPI"}
+
+@app.post("/users/", response_model=UserRead)
+def create_user(data: UserCreate, session: Session = Depends(get_session)):
+    statement=select(Users).where(Users.username == data.username)
+    if session.exec(statement).first():
+        raise HTTPException(status_code=409, detail="That username is taken")
+    
+    pwd = hash_password(data.password)
+    user = Users(username=data.username, password_hash=pwd)
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+    return user
 
 #reading all entries
 @app.get("/entries/")
