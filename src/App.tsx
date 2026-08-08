@@ -6,15 +6,47 @@ import './App.css'
 import Header from './components/Header';
 import Card from './components/Card';
 import CurrentDate from './components/CurrentDate';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
 function App() {
+
+  //API
+  const API = "http://localhost:8000"
+
   //Attempt to add functionality to the buttons
 
-  const [count, setCount] = useState(0);
+  const [entries, setEntries] = useState([])
+  const count = entries.length;
   const target = 7;
+
+  const loadEntries = async () => {
+    const res = await fetch(`${API}/entries/today`, {method: "GET"});
+    const data = await res.json();
+    setEntries(data);
+  }
+
+  useEffect(() => {
+    loadEntries();
+  }, []);
+
+  const addCup = async () => {
+    if(count >= target) return;
+    const res = await fetch(`${API}/entries/`, {method: "POST"});
+    const entry = await res.json();
+    setEntries([...entries, entry]);
+  }
+
+  const undoCup = async () => {
+    if(entries.length === 0) {
+      console.log("Nothing to UNDO!");
+      return;
+    };
+    const recent = entries[entries.length - 1];
+    await fetch(`${API}/entries/${recent.id}`, {method: "DELETE"});
+    setEntries(entries.filter((entry) => entry.id !== recent.id));
+  }
 
   return (
     <>
@@ -25,7 +57,7 @@ function App() {
           <p className='today'><strong>Today</strong></p>
           <CurrentDate className='test-date'/>
         </div>
-      } heading={(count <= target && count >= 0) ? `${count} out of ${target} cups` : `${target} out of ${target} cups`} className="card-test">
+      } heading={`${count} out of ${target} cups`} className="card-test">
 
         <div className='log-container'>
           {Array.from({length: target}, (_, i) => (
@@ -34,9 +66,9 @@ function App() {
         </div>
         <div className="d-flex justify-content-center">
           
-          <button type='button' className="btn btn-success add-btn" onClick={count < target ? () => setCount(count+1) : () => setCount(target)}>+Add a cup</button>
+          <button type='button' className="btn btn-success add-btn" onClick={addCup}>+Add a cup</button>
         </div>
-        <button className="undo" onClick={count > 0 ? () => setCount(count - 1) : () => setCount(0)}>Undo</button>
+        <button className="undo" onClick={undoCup}>Undo</button>
 
       </Card>
     </>
