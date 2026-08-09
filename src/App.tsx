@@ -20,6 +20,7 @@ function App() {
   //STATES
   //loading state so that unloaded values are not flashed to the user
   const [loading, setLoading] = useState(true);
+  const [token ,setToken] = useState<string | null>(null)
   //Attempt to add functionality to the buttons
   const [entries, setEntries] = useState([])
   const count = entries.length;
@@ -33,6 +34,7 @@ function App() {
   }
 
   useEffect(() => {
+    if (!token) return;
     loadEntries();
   }, []);
 
@@ -51,6 +53,13 @@ function App() {
     const recent = entries[entries.length - 1];
     await fetch(`${API}/entries/${recent.id}`, {method: "DELETE"});
     setEntries(entries.filter((entry) => entry.id !== recent.id));
+  }
+
+  if(!token)
+  {
+    return(
+      <Login onLogin={setToken}/>
+    )
   }
 
   return (
@@ -76,7 +85,6 @@ function App() {
         <button className="undo" onClick={undoCup}>Undo</button>
 
       </Card>
-      <Login />
     </>
     
   )
