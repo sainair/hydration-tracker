@@ -26,8 +26,12 @@ function App() {
   const count = entries.length;
   const target = 7;
 
+
   const loadEntries = async () => {
-    const res = await fetch(`${API}/entries/today`, {method: "GET"});
+    const res = await fetch(`${API}/entries/today`, {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`}
+    });
     const data = await res.json();
     setEntries(data);
     setLoading(false);
@@ -36,11 +40,14 @@ function App() {
   useEffect(() => {
     if (!token) return;
     loadEntries();
-  }, []);
+  }, [token]);
 
   const addCup = async () => {
     if(count >= target) return;
-    const res = await fetch(`${API}/entries/`, {method: "POST"});
+    const res = await fetch(`${API}/entries/`, {
+      method: "POST",
+      headers: {Authorization: `Bearer ${token}`}
+    });
     const entry = await res.json();
     setEntries([...entries, entry]);
   }
@@ -50,8 +57,14 @@ function App() {
       console.log("Nothing to UNDO!");
       return;
     };
+
     const recent = entries[entries.length - 1];
-    await fetch(`${API}/entries/${recent.id}`, {method: "DELETE"});
+
+    await fetch(`${API}/entries/${recent.id}`, {
+      method: "DELETE",
+      headers: {Authorization: `Bearer ${token}`}
+    });
+
     setEntries(entries.filter((entry) => entry.id !== recent.id));
   }
 

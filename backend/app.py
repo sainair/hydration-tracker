@@ -112,9 +112,16 @@ def create_user(data: UserCreate, session: Session = Depends(get_session)):
     
     pwd = hash_password(data.password)
     user = Users(username=data.username, password_hash=pwd)
+    #Populating the users table
     session.add(user)
     session.commit()
     session.refresh(user)
+
+    #Populating the habits table to default to a habit of water tracking for now, might change later
+    habit = Habits(user_id=user.id, name="Water", target=7, unit="cups") #Defaulting to 7 til target inputting is implemented
+    session.add(habit)
+    session.commit()
+
     return user
 
 #reading all entries
