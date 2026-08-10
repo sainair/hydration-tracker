@@ -8,9 +8,13 @@ import Card from './components/Card';
 import CurrentDate from './components/CurrentDate';
 import Login from './components/Login';
 
-import { useEffect, useState } from 'react';
+import { Activity, useEffect, useState } from 'react';
+import { Recents } from './components/Recents';
 
-
+interface DayTotal{
+  day: string;
+  total: number; 
+}
 
 function App() {
 
@@ -23,9 +27,10 @@ function App() {
   const [token ,setToken] = useState<string | null>(null)
   //Attempt to add functionality to the buttons
   const [entries, setEntries] = useState([])
+  const [history, setHistory] = useState<DayTotal[]>([]);
+
   const count = entries.length;
   const target = 7;
-
 
   const loadEntries = async () => {
     const res = await fetch(`${API}/entries/today`, {
@@ -37,9 +42,20 @@ function App() {
     setLoading(false);
   }
 
+  const loadHistory = async () => {
+    const res = await fetch(`${API}/history/`, {
+      method: "GET",
+      headers: {Authorization: `Bearer ${token}`}
+    });
+
+    const data = await res.json();
+    setHistory(data)
+  }
+
   useEffect(() => {
     if (!token) return;
     loadEntries();
+    loadHistory();
   }, [token]);
 
   const addCup = async () => {
@@ -78,26 +94,27 @@ function App() {
   return (
     <>
       <Header />
-      <Card 
-      topContent={
-        <div className='d-flex justify-content-between align-items-center mb-2'>
-          <p className='today'><strong>Today</strong></p>
-          <CurrentDate className='test-date'/>
-        </div>
-      } heading={loading ? "Loading..." :`${count} out of ${target} cups`} className="card-test">
-
-        {loading ? <p>Loading...</p> : <div className='log-container'>
-          {Array.from({length: target}, (_, i) => (
-            <div key={i} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
-          ))}
-        </div>}
-        <div className="d-flex justify-content-center">
-          
-          <button type='button' className="btn btn-success add-btn" onClick={addCup}>+Add a cup</button>
-        </div>
-        <button className="undo" onClick={undoCup}>Undo</button>
-
-      </Card>
+      <div className="core-ctr">
+        <Card
+        topContent={
+          <div className='d-flex justify-content-between align-items-center mb-2'>
+            <p className='today'><strong>Today</strong></p>
+            <CurrentDate className='test-date'/>
+          </div>
+        } heading={loading ? "Loading..." :`${count} out of ${target} cups`} className="card-tracker">
+          {loading ? <p>Loading...</p> : <div className='log-container'>
+            {Array.from({length: target}, (_, i) => (
+              <div key={i} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
+            ))}
+          </div>}
+          <div className="d-flex justify-content-center">
+        
+            <button type='button' className="btn btn-success add-btn" onClick={addCup}>+Add a cup</button>
+          </div>
+          <button className="undo" onClick={undoCup}>Undo</button>
+        </Card>
+        <Recents history={history} className="recent-log"></Recents>
+      </div>
     </>
     
   )

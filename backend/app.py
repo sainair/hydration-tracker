@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import SQLModel, Field, create_engine, Session, select
 from sqlalchemy import Column, DateTime, func, text 
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from contextlib import asynccontextmanager
 import bcrypt
 import os
@@ -54,7 +54,7 @@ class Users(SQLModel, table=True):
     password_hash: str
     created_at: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False))
 
-#Response Models
+#Request/response Models
 class UserCreate(SQLModel):
     username: str
     password: str
@@ -63,6 +63,10 @@ class UserRead(SQLModel):
     id: int
     username: str
     created_at: datetime
+
+class DayTotal(SQLModel):
+    day: date
+    total: int
 
 #Helper Functions
 def hash_password(password: str):
@@ -153,6 +157,22 @@ def read_today(session: Session = Depends(get_session), user: Users = Depends(ge
         .bindparams(tz = TIMEZONE))
     )
     return session.exec(statement).all()
+
+@app.get("/history/")
+def read_history(days: int = 5, session: Session = Depends(get_session), user: Users = Depends(get_current_user)):
+    rows = session.connection().execute(text("""
+        SELECT (logged_at AT TIME ZONE :tz)::date AS day,
+            SUM(amount) AS total
+        FROM entry
+        JOIN habits ON entry.habit_id = habits.id
+        WHERE habits.user_id = :user_id
+        GROUP BY day
+        ORDER BY day DESC
+        LIMIT :days
+    """), {"tz": TIMEZONE, "user_id": user.id, "days": days}).all()
+
+    return [DayTotal(day=r.day, total=r.total) for r in rows];
+
 
 #deleting records
 @app.delete("/entries/{entry_id}")

@@ -1,3 +1,11 @@
+.core-ctr{
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 16px;
+  padding-top: 20px;
+}
+
 .today{
   
   text-align: left;
@@ -30,20 +38,15 @@
   }
 }
 
-.card-test{
-  align-self: center;
-  margin-top: 20px;
+.card-tracker{
   border-radius: 12px !important;
+  grid-column: 2;
 }
 
 .log-container{
   display: flex;
   gap: 8px;
-  margin-bottom: 16px;;
-}
-
-.cup-log{
-  width: 2rem !important;
+  margin-bottom: 16px;
 }
 
 /*Rendering cups differently based on fill status*/
@@ -60,7 +63,7 @@
   height: 40px;
   border: 1px solid #2c2c2c;
   border-radius: 12px;
-  background-color: none;
+  background-color: transparent;
 }
 
 .login-logo {
@@ -77,9 +80,9 @@
 }
 
 .login-ctr{
-  margin-top: 0;
-  width: 50%;
-  margin-left: 25%;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
   border: 1px solid grey;
   border-radius: 12px;
   padding: 16px 16px 16px 16px;
@@ -113,4 +116,31 @@
   &:hover{
       box-shadow: 0 4px 12px rgb(85, 84, 84);
   }
+}
+
+.recent-log-items{
+  grid-column: 3;
+  text-align: right;
+  margin-top: 0;
+  margin-right: 0;
+  border-radius: 12px;
+  height: 200px;
+}
+
+.recent-log-items .card-body{
+  width: 14rem;
+  padding: 0.75rem 1rem;
+}
+
+
+.recents-log-list{
+  width: 200px;
+  justify-self: right !important;
+  border-radius: 12px;
+  margin-right: 20px;
+}
+
+.recents-log-title{
+  text-align: right;
+  margin-right: 60px;
 }
