@@ -8,7 +8,7 @@ import Card from './components/Card';
 import CurrentDate from './components/CurrentDate';
 import Login from './components/Login';
 
-import { Activity, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Recents } from './components/Recents';
 
 interface DayTotal{

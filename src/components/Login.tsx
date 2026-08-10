@@ -66,6 +66,13 @@ const Login = ({ onLogin }: LoginProps) => {
 
     }
 
+    const switchToLogin = (showLogin: boolean) => {
+        setError("");
+        setPass("");
+        setConfirmPass("");
+        setLogin(showLogin);
+    };
+
   if(login === false){
     return(
         <>
@@ -78,8 +85,10 @@ const Login = ({ onLogin }: LoginProps) => {
                 <input type="password" className="form-control mb-3" placeholder="Password" value={pass} onChange={(e) => setPass(e.target.value)}/>
                 <input type="password" className="form-control mb-3" placeholder="Confirm Password" value={confirmPass} onChange={ (e) => setConfirmPass(e.target.value)}/>
                 <button className="btn btn-success w-100" type="button" onClick={handleCreate}>Create</button>
-                <p className ="create-p">Have an account? <button className='btn create-btn' type="button" onClick={() => setLogin(true)}>Login</button></p>
+                <p className ="create-p">Have an account? <button className='btn create-btn' type="button" onClick={() => switchToLogin(true)}>Login</button></p>
                 {error && <div className="alert alert-danger">{error}</div>}
+
+
             </div>
         </>
     )
@@ -95,8 +104,9 @@ const Login = ({ onLogin }: LoginProps) => {
             <h4>Login to Glass</h4>
             <input type="text" className="form-control mb-2" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)}/>
             <input type="password" className="form-control mb-3" placeholder="Password" value={pass} onChange={(e) => setPass(e.target.value)}/>
+            {error && <div className="alert alert-danger">{error}</div>}
             <button className="btn btn-success w-100" type="button" onClick={handleLogin}>Login</button>
-            <p className ="create-p">Don't have an account? <button className='btn create-btn' type="button" onClick={() => setLogin(false)}>Create one</button></p>
+            <p className ="create-p">Don't have an account? <button className='btn create-btn' type="button" onClick={() => switchToLogin(false)}>Create one</button></p>
         </div>
     </>
   )
