@@ -5,9 +5,11 @@ from sqlmodel import SQLModel, Field, create_engine, Session, select
 from sqlalchemy import Column, DateTime, func, text 
 from datetime import date, datetime, timedelta, timezone
 from contextlib import asynccontextmanager
+from pydantic import field_validator
 import bcrypt
 import os
 import jwt
+import re
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 engine = create_engine(DATABASE_URL, echo=True)
@@ -58,6 +60,30 @@ class Users(SQLModel, table=True):
 class UserCreate(SQLModel):
     username: str
     password: str
+
+    #Validating username and password based on security constraints
+    @field_validator("username")
+    @classmethod
+    def verify_username(cls, v: str) -> str:
+        v = v.strip()
+        if not re.fullmatch(r"[a-zA-Z0-9_]{3,20}", v):
+            raise HTTPException(status_code=422, detail="Username must be between 3 and 20 characters with only letters, numbers and _")
+        return v.lower()
+    
+    @field_validator("password")
+    @classmethod
+    def vcheck_password(cls, p: str) -> str:
+        if len(p) < 5:
+            raise HTTPException(status_code=422, detail="Password too short")
+        if len(p.encode()) > 54:
+            raise HTTPException(status_code=422, detail="Password too long")
+        if not re.search(r"[a-z]", p):
+            raise HTTPException(status_code=422, detail="Password must contain a lowercase letter")
+        if not re.search(r"[A-Z]", p):
+            raise HTTPException(status_code=422, detail="Password must contain an uppercase letter")
+        if not re.search(r"[!@#$%^&*()_+=-]", p):
+            raise HTTPException(status_code=422, detail="Password must contain a special character")
+        return p
 
 class UserRead(SQLModel):
     id: int

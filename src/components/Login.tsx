@@ -15,6 +15,14 @@ const Login = ({ onLogin }: LoginProps) => {
     const [confirmPass, setConfirmPass] = useState("");
     const [error, setError] = useState("");
 
+    const forbidden = ["!@#$%^&*()+±?><,./\"\\:;'{}[]`~¡™£¢∞§¶•ªº–≠ﬂ±⁄€‹›ﬁﬂ‡°·‚—±”’ÚÆ˘¿˘¿¯Â˜ı◊Ç˛¸/* Í˝ "]
+
+    const errorMessage = (detail: unknown): string => {
+        if (typeof detail === "string") return detail;
+        if (Array.isArray(detail)) return detail[0]?.msg ?? "Invalid input";
+        return "Something went wrong";
+    };
+
     const handleCreate = async () => {
         setError("");
         if(pass!==confirmPass)
@@ -22,6 +30,7 @@ const Login = ({ onLogin }: LoginProps) => {
             setError("Passwords do not match!")
             return;
         }
+
         const res = await fetch(`${API}/users/`, {
             method: "POST",
             headers: {'Content-Type': 'application/json'},
@@ -31,7 +40,7 @@ const Login = ({ onLogin }: LoginProps) => {
         const data = await res.json();
 
         if(!res.ok){
-            setError(data.detail)
+            setError(errorMessage(data.detail))
             return;
         }
 
@@ -52,7 +61,7 @@ const Login = ({ onLogin }: LoginProps) => {
         const res =await fetch(`${API}/auth/login`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({username, password: pass})
+            body: JSON.stringify({username: username.trim().toLowerCase(), password: pass})
         });
 
         const data = await res.json();
