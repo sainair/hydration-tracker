@@ -66,6 +66,7 @@ function App() {
     });
     const entry = await res.json();
     setEntries([...entries, entry]);
+    loadHistory();
   }
 
   const undoCup = async () => {
@@ -82,6 +83,7 @@ function App() {
     });
 
     setEntries(entries.filter((entry) => entry.id !== recent.id));
+    loadHistory();
   }
 
   if(!token)

@@ -15,8 +15,6 @@ const Login = ({ onLogin }: LoginProps) => {
     const [confirmPass, setConfirmPass] = useState("");
     const [error, setError] = useState("");
 
-    const forbidden = ["!@#$%^&*()+±?><,./\"\\:;'{}[]`~¡™£¢∞§¶•ªº–≠ﬂ±⁄€‹›ﬁﬂ‡°·‚—±”’ÚÆ˘¿˘¿¯Â˜ı◊Ç˛¸/* Í˝ "]
-
     const errorMessage = (detail: unknown): string => {
         if (typeof detail === "string") return detail;
         if (Array.isArray(detail)) return detail[0]?.msg ?? "Invalid input";

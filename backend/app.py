@@ -39,14 +39,14 @@ app.add_middleware(
 #TABLES
 class Habits(SQLModel, table=True):
     id: int | None = Field(default = None, primary_key = True)
-    user_id: int = Field(foreign_key="users.id", index=True)
+    user_id: int = Field(foreign_key="users.id", ondelete="CASCADE", index=True)
     name: str
     target: int
     unit: str
 
 class Entry(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    habit_id: int = Field(foreign_key="habits.id")
+    habit_id: int = Field(foreign_key="habits.id", ondelete="CASCADE")
     logged_at: datetime | None = Field(default=None, sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)) #handle timezone conversions
     amount: int = 1
 
@@ -156,8 +156,8 @@ def create_user(data: UserCreate, session: Session = Depends(get_session)):
 
 #reading all entries
 @app.get("/entries/")
-def read_entries(session: Session = Depends(get_session)):
-    entries = session.exec(select(Entry)).all()
+def read_entries(session: Session = Depends(get_session), user: Users = Depends(get_current_user)):
+    entries = session.exec(select(Entry).join(Habits).where(Habits.user_id == user.id)).all()
     return entries
 
 #write into the database with POST
