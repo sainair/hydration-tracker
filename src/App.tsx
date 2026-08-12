@@ -4,12 +4,14 @@ import './App.css'
 
 //Component imports
 import Header from './components/Header';
-import Card from './components/Card';
+import Card from './components/MainCard';
 import CurrentDate from './components/CurrentDate';
 import Login from './components/Login';
 
 import { useEffect, useState } from 'react';
 import { Recents } from './components/Recents';
+import Pace from './components/Pace';
+import Stats from './components/Stats';
 
 interface DayTotal{
   day: string;
@@ -31,6 +33,7 @@ function App() {
 
   const count = entries.length;
   const target = 7;
+  const currentTime = new Date().getHours();
 
   const loadEntries = async () => {
     const res = await fetch(`${API}/entries/today`, {
@@ -93,8 +96,10 @@ function App() {
 
   return (
     <>
-      <Header />
+      <Header onClick={() => setToken(null)}/>
       <div className="core-ctr">
+        <Stats className="stats-today" count={count} deficit={currentTime < 8 ? Math.round((currentTime-8)*target)/14 : 0}/>
+
         <Card
         topContent={
           <div className='d-flex justify-content-between align-items-center mb-2'>
@@ -102,11 +107,14 @@ function App() {
             <CurrentDate className='test-date'/>
           </div>
         } heading={loading ? "Loading..." :`${count} out of ${target} cups`} className="card-tracker">
-          {loading ? <p>Loading...</p> : <div className='log-container'>
+          {loading ? <p>Loading...</p> : <><Pace count={count} />
+            <div className='log-container'>
+            
             {Array.from({length: target}, (_, i) => (
               <div key={i} className={(i+1) <= count ? 'cup-filled' : 'cup-empty'} />
             ))}
-          </div>}
+          </div></>}
+
           <div className="d-flex justify-content-center">
         
             <button type='button' className="btn btn-success add-btn" onClick={addCup}>+Add a cup</button>
