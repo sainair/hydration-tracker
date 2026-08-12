@@ -28,7 +28,7 @@ interface Entry{
 function App() {
 
   //API
-  const API = "http://localhost:8000"
+  const API = import.meta.env.VITE_API_URL;
 
   //STATES
   //loading state so that unloaded values are not flashed to the user

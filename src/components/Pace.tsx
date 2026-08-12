@@ -12,7 +12,7 @@ const Pace = ({count}: PaceProps) => {
     const start = 8; //8am, day begins
     const awake = 14; //14 hour day assuming a healthy 10pm bed time
 
-    const hours = 12 //new Date().getHours();
+    const hours = new Date().getHours();
     const ideal = Math.min(target, Math.round(((hours - start) * target)/ awake));
     const deficit = ideal - count;
     let message;

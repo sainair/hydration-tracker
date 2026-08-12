@@ -7,7 +7,7 @@ interface LoginProps{
 
 const Login = ({ onLogin }: LoginProps) => {
 
-    const API="http://localhost:8000"
+    const API=import.meta.env.VITE_API_URL
 
     const[login, setLogin] = useState(true);
     const [username, setUsername] = useState("");
