@@ -30,7 +30,7 @@ jobs:
             - run: pip install -r requirements.txt
               working-directory: backend
 
-            - run: python -c import app
+            - run: python -c "import app"
               working-directory: backend
               env:
                 DATABASE_URL: postgresql+psycopg://u:p@localhost:5432/db
