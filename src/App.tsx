@@ -139,7 +139,7 @@ function App() {
       <Header onClick={() => setToken(null)}/>
         {error && <div className="error-ctr">{error}<button className='error-close' onClick={()=>setError("")}>x</button></div>}
       <div className="core-ctr">
-        <Stats className="stats-today" count={count} deficit={currentTime < 8 ? Math.round((currentTime-8)*target)/14 : 0}/>
+        <Stats className="stats-today" count={count} deficit={currentTime < 8 ? 0 : Math.max(0, Math.min(target, Math.round(((currentTime-8)*target)/14)-count))}/>
 
         <Card
         topContent={
