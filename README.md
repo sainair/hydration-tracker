@@ -1,6 +1,7 @@
 # Glass
 
 ![CI](https://github.com/sainair/hydration-tracker/actions/workflows/CI.yml/badge.svg)
+**Live:** [glass-g7c5.onrender.com](https://glass-g7c5.onrender.com)
  
 A hydration tracker built to track one's hydration goals. This app was built to actually be used, not just demonstrated. Log a cup, see your progress against a daily target, and look back over the last few days.
  
@@ -20,18 +21,20 @@ Built as a full-stack learning project covering containerisation, REST API desig
 | Database | PostgreSQL 18 |
 | Auth | JWT (PyJWT), bcrypt password hashing |
 | Containers | Docker Compose |
+|CI/CD| GitHub Actions|
+|Hosting| Render (frontend+API), Neon(backend/postgres)|
  
 ---
  
 ## Key features (constantly changing)
  
-**Account management:** Lets users create accounts using a username and a password (password constraints not implemented as yet). Passwords are hashed with bcrypt using a per-user salt so that the plaintext is never stored and never leaves the request that created it.
+**Account management:** Lets users create accounts using a username and a password (with proper password constraints on password length and characters). Passwords are hashed with bcrypt using a per-user salt so that the plaintext is never stored and never leaves the request that created it.
  
 **Authenticated sessions:** User logins return a signed JWT token with an hour's expiry limit. Every subsequent request carries it in an `Authorization` header, and the API verifies the signature independently on each one. This makes it so a server-side session state is not required.
  
 **Data isolation:** Every query filters by the current authenticated user. A logged-in user cannot read or delete another user's entries, including by guessing record IDs. Lookups join through the habit table and filter on ownership rather than fetching by ID and checking afterwards.
  
-**Daily tracking:** Log a cup with one click. The interface shows progress against a target as a row of filled and empty "cups", with an undo button for accidental logs.
+**Daily tracking:** Users log a cup with one click. The interface shows progress against a target as a row of filled and empty "cups", with an undo button for accidental logs.
  
 **Correct day boundaries:** Timestamps are stored as postgres' `TIMESTAMPTZ` in UTC. The user's current day is computed by shifting each timestamp into the user's timezone before comparing against that timezone's current date so that a cup logged at 11pm counts toward the right day rather than falling into the next UTC one.
  
@@ -51,7 +54,7 @@ Browser                    Container network
 └──────────────┘  JSON    └──────────────────┘        └──────────────┘
 ```
  
-The frontend never talks to the database. It knows only about URLs and JSON shapes. The API on the other hand, owns the connection string, the credentials, and every authorization decision. Anything enforced only in the browser can be bypassed, thus, nothing is.
+The app is structured such that the frontend never communicates with the database. It knows only about URLs and JSON shapes. The API on the other hand, owns the connection string, the credentials, and every authorization decision. Anything enforced only in the browser can be bypassed, thus, nothing is.
  
 ### Data model
  
@@ -65,9 +68,9 @@ created_at           target                    amount
                      unit
 ```
  
-One user has many habits; one habit has many entries. Entries reach their owner through the habit, so authorisation is a join operation rather than a duplicated `user_id` column.
+One user may have many habits and one habit has many entries. Entries reach their owner through the habit, so authorisation is a join operation rather than a duplicated `user_id` column.
  
-The `habits` table currently holds one row per user — water — created automatically at registration, done to allow for future expansion to other habits.
+The `habits` table currently holds one row per user for water-related actions. This is done automatically at registration, done to allow for future expansion to other habits.
 ---
  
 ## Running it
@@ -82,11 +85,16 @@ cd hydration-tracker
 Create a `.env` in the project root:
  
 ```
-POSTGRES_DB=hydration
+POSTGRES_DB=hydration 
+POSTGRES_PASSWORD=hydrationmatters
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=<choose one>
-SECRET_KEY=<see below>
-TIMEZONE=Asia/Qatar
+
+THE ABOVE VALUES ARE FOR A LOCAL POSTGRES
+
+SECRET_KEY=<See below>
+VITE_API_URL=<localhost/render instance>
+ALLOWED_ORIGINS=<localhost/render instance>
+DB_URL=<Points at either a localhost/neon instance>
 ```
  
 Generate the JWT signing key:
@@ -101,13 +109,13 @@ Then:
 docker compose up --build
 ```
  
-| Service | URL |
+| Service | URL | Local reference|
 |---|---|
-| App | http://localhost:5173 |
-| API docs | http://localhost:8000/docs |
-| Database | localhost:5432 |
+| App | https://glass-g7c5.onrender.com | http://localhost:5173 |
+| API docs | https://glassapi.onrender.com/docs | http://localhost:8000/docs |
+| Database | hosted on neon | http://localhost:5432 |
  
-`.env` is gitignored. The `SECRET_KEY` is what signs every token — anyone holding it can forge a token for any user, so it belongs in a secret manager rather than a repository.
+`.env` is gitignored. The `SECRET_KEY` is what signs every token. Anyone holding it can forge a token for any user, so it lives in a secret manager rather than being committed to the repository. 
  
 ---
  
@@ -147,10 +155,10 @@ Interactive documentation is generated from the type hints and available at `/do
 **Near term**
  
 - Persist the token so a page refresh does not log the user out, with handling for the expired-token case
-- Logout
 - Editable daily target — the column exists, the interface does not
 - Per-entry deletion from the activity list, rather than undo alone
 - Variable amounts per entry, so a 500ml bottle is one record rather than two
+- Password resets
 **Later**
  
 - Multiple habits per user — the schema already supports this
