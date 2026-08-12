@@ -1,9 +1,70 @@
+.header-bar{
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 16px 24px;
+}
+
+.header-logo{
+  justify-self: start;
+}
+
+.logout{
+  grid-column: 3;
+  padding: 4px;
+  justify-self: end;
+  border-radius: 12px;
+  border: none;
+  width: 6rem;
+  background-color: #027067;
+
+  &:hover{
+    background-color: #025b53;
+    color: black;
+  }
+}
+
 .core-ctr{
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: start;
   gap: 16px;
   padding-top: 20px;
+}
+
+.stats-today{
+  grid-column: 1;
+  justify-self: start;
+  justify-items: start;
+  border-radius: 12px;
+  width: 16rem;
+  padding: 0.15rem 1.15rem;
+
+  &:hover{
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.stat-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.stat-row:last-child{
+  border-bottom: none; /*Make the last stat end without a line underneath*/
+}
+
+.stat-label{
+  font-size: 13px;
+  color: #9a9a9a;
+}
+
+.stat-value{
+  font-size: 17px;
+  font-weight: 500;
 }
 
 .today{
@@ -41,6 +102,9 @@
 .card-tracker{
   border-radius: 12px !important;
   grid-column: 2;
+  &:hover{
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4);
+  }
 }
 
 .log-container{
@@ -127,6 +191,16 @@
   height: 200px;
 }
 
+.recent-log{
+  width: 16rem;
+  border-radius: 12px;
+  justify-self: right;
+
+  &:hover{
+    box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
 .recent-log-items .card-body{
   width: 14rem;
   padding: 0.75rem 1rem;
@@ -143,4 +217,8 @@
 .recents-log-title{
   text-align: right;
   margin-right: 60px;
+}
+
+.pace-ctr{
+  display: block;
 }

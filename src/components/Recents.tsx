@@ -21,13 +21,15 @@ const label= (day:string) => {
 export const Recents = ({history, className}: RecentsProps) => {
 
   return (
-    <div className={className}>
-        <p className="recents-log-title">Recent Activity</p>
-        <ul className="list-group recents-log-list">
-            {history.map((d) => (
-                <li className="list-group-item recents-log-items" key={d.day}>{label(d.day)}: {d.total} cups</li>
-            ))}
-        </ul>
+    <div className={`card ${className}`}>
+        <div className="card-body">
+            <p className="recents-log-title">Recent Activity</p>
+            <ul className="list-group recents-log-list">
+                {history.map((d) => (
+                    <li className="list-group-item recents-log-items" key={d.day}>{label(d.day)}: {d.total} cups</li>
+                ))}
+            </ul>
+        </div>
     </div>
   )
 }
