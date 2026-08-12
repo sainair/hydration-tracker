@@ -3,6 +3,8 @@
 A hydration tracker built to track one's hydration goals. This app was built to actually be used, not just demonstrated. Log a cup, see your progress against a daily target, and look back over the last few days.
  
 Built as a full-stack learning project covering containerisation, REST API design, relational data modelling, and token-based authentication.
+
+![Glass- Homepage](docs/Main.png)
  
 ---
  
