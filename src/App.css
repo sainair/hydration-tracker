@@ -32,6 +32,29 @@
   padding-top: 20px;
 }
 
+.error-ctr {
+  max-width: 600px;
+  margin: 12px auto 0;
+  padding: 10px 14px;
+  border: 1px solid #5a2a2a;
+  border-radius: 12px;
+  background: #2a1a1a;
+  color: #e08a8a;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.error-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .stats-today{
   grid-column: 1;
   justify-self: start;

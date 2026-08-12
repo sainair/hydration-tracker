@@ -18,6 +18,13 @@ interface DayTotal{
   total: number; 
 }
 
+interface Entry{
+  amount: number;
+  habit_id: number;
+  id: number;
+  logged_at: string;
+}
+
 function App() {
 
   //API
@@ -28,31 +35,64 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [token ,setToken] = useState<string | null>(null)
   //Attempt to add functionality to the buttons
-  const [entries, setEntries] = useState([])
+  const [entries, setEntries] = useState<Entry[]>([]);
   const [history, setHistory] = useState<DayTotal[]>([]);
+  
+  const [error, setError] = useState("");
 
   const count = entries.length;
   const target = 7;
   const currentTime = new Date().getHours();
 
   const loadEntries = async () => {
-    const res = await fetch(`${API}/entries/today`, {
-      method: "GET",
-      headers: {Authorization: `Bearer ${token}`}
-    });
-    const data = await res.json();
-    setEntries(data);
-    setLoading(false);
+    try{
+      const res = await fetch(`${API}/entries/today`, {
+        method: "GET",
+        headers: {Authorization: `Bearer ${token}`}
+      });
+      if(res.status === 401)
+      {
+        setError("Session expired, logging out")
+        setToken(null);
+      }
+      if(!res.ok)
+      {
+        setError("Could not fetch today's entries");
+        return;
+      }
+      const data = await res.json();
+      setEntries(data);
+    }catch{
+      setError("Couldn't reach the server");
+    }finally{
+      setLoading(false);
+    }
   }
 
   const loadHistory = async () => {
-    const res = await fetch(`${API}/history/`, {
-      method: "GET",
-      headers: {Authorization: `Bearer ${token}`}
-    });
+    try{
+      const res = await fetch(`${API}/history/`, {
+        method: "GET",
+        headers: {Authorization: `Bearer ${token}`}
+      });
 
-    const data = await res.json();
-    setHistory(data)
+      if(res.status === 401)
+      {
+        setError("Session expired, logging out");
+        setToken(null);
+        return;
+      }
+
+      if(!res.ok){
+        setError("Couldn't load activity")
+        return;
+      }
+
+      const data = await res.json();
+      setHistory(data)
+    }catch{
+      setError("Couldn't reach server")
+    }
   }
 
   useEffect(() => {
@@ -97,6 +137,7 @@ function App() {
   return (
     <>
       <Header onClick={() => setToken(null)}/>
+        {error && <div className="error-ctr">{error}<button className='error-close' onClick={()=>setError("")}>x</button></div>}
       <div className="core-ctr">
         <Stats className="stats-today" count={count} deficit={currentTime < 8 ? Math.round((currentTime-8)*target)/14 : 0}/>
 
