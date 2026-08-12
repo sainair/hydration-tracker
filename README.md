@@ -110,7 +110,7 @@ docker compose up --build
 ```
  
 | Service | URL | Local reference|
-|---|---|
+|---|---|---|
 | App | https://glass-g7c5.onrender.com | http://localhost:5173 |
 | API docs | https://glassapi.onrender.com/docs | http://localhost:8000/docs |
 | Database | hosted on neon | http://localhost:5432 |
