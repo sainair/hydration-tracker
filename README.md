@@ -1,4 +1,6 @@
 # Glass
+
+![CI](https://github.com/sainair/hydration-tracker/actions/workflows/CI.yml/badge.svg)
  
 A hydration tracker built to track one's hydration goals. This app was built to actually be used, not just demonstrated. Log a cup, see your progress against a daily target, and look back over the last few days.
  
