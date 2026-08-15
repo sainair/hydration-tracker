@@ -98,7 +98,7 @@ const Login = ({ onLogin }: LoginProps) => {
 
     <>
         <div className="welcome">
-            <p>Welcome to Glass! <img src='/glass-logo.svg'/></p>
+            <p>{`Welcome to Glass.dev!`} <img src='/glass-logo.svg'/></p>
         </div>
         <div className="login-ctr">
             <h4>Login to Glass</h4>
