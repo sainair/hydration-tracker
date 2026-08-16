@@ -5,6 +5,8 @@ interface LoginProps{
     onLogin: (token: string) => void;
 }
 
+const APP_NAME = import.meta.env.VITE_APP_NAME;
+
 const Login = ({ onLogin }: LoginProps) => {
 
     const API=import.meta.env.VITE_API_URL
@@ -77,7 +79,7 @@ const Login = ({ onLogin }: LoginProps) => {
     return(
         <>
             <div className="welcome">
-                <p>Welcome to Glass<img src="/glass-logo.svg" /></p>
+                <p>Welcome to {APP_NAME}<img src="/glass-logo.svg" /></p>
             </div>
             <div className="create-ctr">
                 <h4>Create an account</h4>
@@ -98,7 +100,7 @@ const Login = ({ onLogin }: LoginProps) => {
 
     <>
         <div className="welcome">
-            <p>{`Welcome to Glass.dev!`} <img src='/glass-logo.svg'/></p>
+            <p>{`Welcome to ${APP_NAME}!`} <img src='/glass-logo.svg'/></p>
         </div>
         <div className="login-ctr">
             <h4>Login to Glass</h4>
