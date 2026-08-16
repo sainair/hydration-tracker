@@ -20,6 +20,22 @@ jobs:
 
     backend:
         runs-on: ubuntu-latest
+        env:
+            DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/hydration_test
+            TEST_DB_URL: postgresql+psycopg://postgres:postgres@localhost:5432/hydration_test
+            SECRET_KEY: placeholder-key123
+            TIMEZONE: Asia/Qatar
+        services:
+          postgres:
+            image: postgres:18
+            env:
+              POSTGRES_PASSWORD: postgres
+              POSTGRES_DB: hydration_test
+            ports:
+              - 5432:5432
+            options: >-
+              --health-cmd pg_isready --health-interval 10s
+              --health-timeout 5s --health-retries 5
         steps:
             - uses: actions/checkout@v4
             - uses: actions/setup-python@v5
@@ -30,8 +46,5 @@ jobs:
             - run: pip install -r requirements.txt
               working-directory: backend
 
-            - run: python -c "import app"
+            - run: pytest
               working-directory: backend
-              env:
-                DATABASE_URL: postgresql+psycopg://u:p@localhost:5432/db
-                SECRET_KEY: placeholder-key123
