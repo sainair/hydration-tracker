@@ -228,3 +228,20 @@ def login(data: UserLogin, session: Session = Depends(get_session)):
     
     access_token = create_access_token(user.id)
     return {"access_token": access_token, "token_type": "bearer"}
+
+@app.get("/streak")
+def get_streak(session: Session = Depends(get_session), user: Users = Depends(get_current_user)):
+    with open('./streaks.sql') as sql:
+
+        habit = session.exec(select(Habits).where(Habits.user_id == user.id)).first()
+        if habit is None:
+            return {"current_streak": 0, "last_run_length": 0, "started": None, "ended": None}
+
+        query = sql.read()
+        row = session.exec(text(query).bindparams(tz=TIMEZONE, user_id = user.id, habit_id = habit.id)).first()
+        if row is None:
+            return {"current_streak": 0, "last_run_length": 0,
+                "started": None, "ended": None}
+
+        return {"current_streak": row.current_streak, "last_run_length": row.last_run_length,
+                "started": row.started, "ended": row.ended}

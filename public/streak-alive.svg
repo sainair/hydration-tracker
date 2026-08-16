@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 76" width="64" height="76" role="img" aria-label="Streak active">
+  <defs>
+    <linearGradient id="glassAliveBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5EEAD4"/>
+      <stop offset="45%" stop-color="#22D3EE"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+    <radialGradient id="glassAliveGlow" cx="50%" cy="62%" r="50%">
+      <stop offset="0%" stop-color="#22D3EE" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#22D3EE" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="glassAliveClip">
+      <path d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"/>
+    </clipPath>
+  </defs>
+
+  <ellipse class="badge-glow" cx="32" cy="47" rx="30" ry="30" fill="url(#glassAliveGlow)"/>
+
+  <path class="badge-body"
+        d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"
+        fill="url(#glassAliveBody)"/>
+
+  <g clip-path="url(#glassAliveClip)" class="badge-detail">
+    <path d="M8 52 q8 -5 16 0 t16 0 t16 0 v18 H8 Z" fill="#0369A1" opacity="0.35"/>
+    <path d="M8 58 q8 -5 16 0 t16 0 t16 0 v14 H8 Z" fill="#075985" opacity="0.4"/>
+    <circle cx="25" cy="44" r="2.6" fill="#ECFEFF" opacity="0.75"/>
+    <circle cx="38" cy="52" r="1.8" fill="#ECFEFF" opacity="0.55"/>
+    <circle cx="31" cy="60" r="1.2" fill="#ECFEFF" opacity="0.4"/>
+    <path d="M24 22 C20 29 18 34 18 40" stroke="#ECFEFF" stroke-opacity="0.65"
+          stroke-width="3.2" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <path class="badge-rim"
+        d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"
+        fill="none" stroke="#A5F3FC" stroke-opacity="0.6" stroke-width="1.5"/>
+</svg>

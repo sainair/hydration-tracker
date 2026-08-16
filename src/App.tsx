@@ -1,6 +1,7 @@
 //import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
+import './types'
 
 //Component imports
 import Header from './components/Header';
@@ -12,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { Recents } from './components/Recents';
 import Pace from './components/Pace';
 import Stats from './components/Stats';
+import type { streakState } from './types';
 
 interface DayTotal{
   day: string;
@@ -39,10 +41,13 @@ function App() {
   const [history, setHistory] = useState<DayTotal[]>([]);
   
   const [error, setError] = useState("");
+  const [streak, setStreak] = useState(0);
+  const [currentStreakState, setStreakState] = useState<streakState>("dead");
 
   const count = entries.length;
   const target = 7;
   const currentTime = new Date().getHours();
+
 
   const loadEntries = async () => {
     try{
@@ -95,10 +100,33 @@ function App() {
     }
   }
 
+  const loadStreak = async () => {
+    const res = await fetch(`${API}/streak`, {
+      "headers": {Authorization: `Bearer ${token}`},
+      "method": "GET"
+    });
+
+    if(!res.ok){
+      setError("Couldn't connect to server");
+      return;
+    }
+
+    const data = await res.json();
+    const today = new Date().toLocaleDateString('en-CA');
+    setStreak(data.current_streak)
+
+    if(data.current_streak === 0){
+      setStreakState("dead");
+    }else if (data.ended === today) setStreakState("alive");
+    else setStreakState("frozen");
+
+  }
+
   useEffect(() => {
     if (!token) return;
     loadEntries();
     loadHistory();
+    loadStreak();
   }, [token]);
 
   const addCup = async () => {
@@ -109,6 +137,8 @@ function App() {
     });
     const entry = await res.json();
     setEntries([...entries, entry]);
+    loadHistory();
+    loadStreak();
   }
 
   const undoCup = async () => {
@@ -125,6 +155,8 @@ function App() {
     });
 
     setEntries(entries.filter((entry) => entry.id !== recent.id));
+    loadHistory();
+    loadStreak();
   }
 
   if(!token)
@@ -136,10 +168,10 @@ function App() {
 
   return (
     <>
-      <Header onClick={() => setToken(null)}/>
+      <Header onClick={() => setToken(null)} count={streak} currentStreakState={currentStreakState}/>
         {error && <div className="error-ctr">{error}<button className='error-close' onClick={()=>setError("")}>x</button></div>}
       <div className="core-ctr">
-        <Stats className="stats-today" count={count} deficit={currentTime < 8 ? 0 : Math.max(0, Math.min(target, Math.round(((currentTime-8)*target)/14)-count))}/>
+        <Stats className="stats-today" count={count} deficit={currentTime < 8 ? 0 : Math.max(0, Math.min(target, Math.round(((currentTime-8)*target)/14)-count))} streak={streak}/>
 
         <Card
         topContent={
