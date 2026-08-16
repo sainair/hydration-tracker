@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 76" width="64" height="76" role="img" aria-label="Streak at risk">
+  <defs>
+    <linearGradient id="glassFrozenBody" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#F0F9FF"/>
+      <stop offset="50%" stop-color="#BAE6FD"/>
+      <stop offset="100%" stop-color="#7DD3FC"/>
+    </linearGradient>
+    <clipPath id="glassFrozenClip">
+      <path d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"/>
+    </clipPath>
+  </defs>
+
+  <path class="badge-body"
+        d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"
+        fill="url(#glassFrozenBody)"/>
+
+  <g clip-path="url(#glassFrozenClip)" class="badge-detail"
+     stroke="#0EA5E9" stroke-opacity="0.42" stroke-width="1.4" fill="none" stroke-linecap="round">
+    <path d="M32 20 L32 68"/>
+    <path d="M13 38 L51 60"/>
+    <path d="M51 38 L13 60"/>
+    <path d="M32 32 l-6 6 6 6 6 -6 Z" stroke-opacity="0.6"/>
+    <path d="M26 26 l6 6"/>
+    <path d="M38 26 l-6 6"/>
+    <path d="M20 48 l6 -4"/>
+    <path d="M44 48 l-6 -4"/>
+    <path d="M27 57 l5 -4 5 4"/>
+  </g>
+
+  <g class="badge-detail" clip-path="url(#glassFrozenClip)">
+    <path d="M32 28 l-4 4 4 4 4 -4 Z" fill="#FFFFFF" opacity="0.85"/>
+    <path d="M18 44 l-3 3 3 3 3 -3 Z" fill="#FFFFFF" opacity="0.55"/>
+    <path d="M46 52 l-2.5 2.5 2.5 2.5 2.5 -2.5 Z" fill="#FFFFFF" opacity="0.5"/>
+  </g>
+
+  <path class="badge-rim"
+        d="M32 4 C32 4 10 33 10 47 a22 22 0 0 0 44 0 C54 33 32 4 32 4 Z"
+        fill="none" stroke="#38BDF8" stroke-opacity="0.75" stroke-width="1.8"/>
+</svg>
