@@ -59,3 +59,7 @@ def log_entries(session):
             session.add(Entry(habit_id=habit_id, logged_at=stamp, amount=1))
         session.commit()
     return _log
+
+@pytest.fixture
+def today():
+    return datetime.now(ZoneInfo(TIMEZONE)).date()
