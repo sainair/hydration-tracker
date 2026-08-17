@@ -1,6 +1,8 @@
 from sqlmodel import create_engine, Session, SQLModel, select
-from app import app, get_session, Habits
+from app import app, get_session, Habits, Entry, TIMEZONE
 from fastapi.testclient import TestClient
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 import os
 import pytest
 
@@ -46,3 +48,14 @@ def make_user(client, session):
 
         return {"headers":{"Authorization":f"Bearer {res.json()['access_token']}"}, "habit_id": habit.id}
     return _make
+
+@pytest.fixture
+def log_entries(session):
+    def _log(habit_id: int, days_ago: int, count: int, hour: int = 12):
+        tz = ZoneInfo(TIMEZONE)
+        day = datetime.now(tz).date() - timedelta(days=days_ago)
+        stamp = datetime(day.year, day.month, day.day, hour, tzinfo=tz)
+        for _ in range(count):
+            session.add(Entry(habit_id=habit_id, logged_at=stamp, amount=1))
+        session.commit()
+    return _log
