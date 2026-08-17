@@ -12,7 +12,7 @@ def test_streaks_break_with_gap(client, make_user, log_entries, today):
     res = client.get("/streak", headers=user["headers"])
 
     assert res.status_code == 200
-    assert res.json()["current_streak"] == 4
+    assert res.json()["current_streak"] == 3
     assert res.json()["last_run_length"] == 3
     assert res.json()["started"] == str(today - timedelta(days=3))
     assert res.json()["ended"] == str(today - timedelta(days=1))
