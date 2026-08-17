@@ -4,3 +4,5 @@ sqlmodel
 psycopg[binary]
 bcrypt
 pyjwt
+pytest
+httpx
